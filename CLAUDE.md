@@ -56,9 +56,40 @@ For every financial statement, proactively scan for and flag the following as po
 - Revenue that appears inconsistent year over year without explanation
 - Large miscellaneous or "other expense" line items with no explanation
 
+## Templates
+
+All output must use the templates stored in the `/templates` folder. Before producing any analysis output, always:
+
+1. Check for a file at `/templates/office-analysis.md` — use it as the formatting template for single-office analyses
+2. Check for a file at `/templates/comparison.md` — use it as the formatting template for side-by-side comparisons
+3. If a template file exists, follow its structure, section order, and table layout exactly — do not improvise a different format
+4. If a template file is missing, fall back to the default formats defined below and notify me that the template was not found
+
+This ensures every analysis I produce looks identical, making it easy to compare offices over time.
+
+### New Output Types — Auto-Generate a Template Draft
+
+If I ask for a type of analysis or output that does not have a matching template in `/templates`:
+
+1. Complete the analysis as best you can using a logical, well-structured format
+2. After delivering the output, save a clean reusable version of that format as a new file in `/home/claude/` named `template-draft-[output-type].md` (e.g. `template-draft-due-diligence-checklist.md`)
+3. Tell me the file has been created, what it covers, and that I can review it and move it to `/templates` if I want it used going forward
+4. Strip all real data from the draft — it should contain only structure, placeholder labels, and instructions, not actual numbers or names from my analysis
+
 ## Output Format for Each Office
 
-### Summary Table
+Use `/templates/office-analysis.md` if it exists. Otherwise use this default format exactly — do not deviate from section order, table structure, or heading names.
+
+---
+
+# Practice Analysis: [Practice Name]
+**Date of Analysis:** [Today's Date]
+**Year(s) Analyzed:** [Year(s)]
+
+---
+
+### 1. Summary
+
 | Metric | Value |
 |--------|-------|
 | Practice Name | |
@@ -70,30 +101,78 @@ For every financial statement, proactively scan for and flag the following as po
 | Adjusted EBITDA | |
 | EBITDA Margin % | |
 
-### Add Back Detail Table
-| Item | Amount | Reason | Include? |
-|------|--------|--------|---------|
-| Owner Compensation Adjustment | $ | Above market rate | Yes/Ask |
-| Interest Expense | $ | Non-transferable debt | Yes |
-| Depreciation | $ | Non-cash | Yes |
-| [Each add back listed individually] | | | |
-| **Total Add Backs** | **$** | | |
+---
 
-### Notes and Flags
-- List anything unusual or worth investigating before making an offer
-- List any missing information needed to complete the analysis
-- List any assumptions made
+### 2. EBITDA Build
+
+Show the step-by-step math in this exact order:
+
+| Step | Item | Amount |
+|------|------|--------|
+| 1 | Net Income | $ |
+| 2 | + Interest Expense | $ |
+| 3 | + Taxes | $ |
+| 4 | + Depreciation | $ |
+| 5 | + Amortization | $ |
+| | **Base EBITDA** | **$** |
+| 6 | + Total Add Backs | $ |
+| | **Adjusted EBITDA** | **$** |
+
+---
+
+### 3. Add Back Detail
+
+| # | Item | Amount | Category | Reason | Include? |
+|---|------|--------|----------|--------|---------|
+| 1 | Owner Compensation Adjustment | $ | Always Add Back | Above market rate | Yes |
+| 2 | Interest Expense | $ | Always Add Back | Non-transferable debt | Yes |
+| 3 | Depreciation | $ | Always Add Back | Non-cash expense | Yes |
+| 4 | [Each additional add back] | $ | [Category] | [Plain English reason] | Yes / Ask |
+| | **Total Add Backs** | **$** | | | |
+
+Categories must be one of: `Always Add Back`, `Likely Add Back`, `Red Flag`
+
+---
+
+### 4. Notes and Flags
+
+**⚠️ Red Flags**
+- [List each red flag with a plain English explanation]
+
+**❓ Missing Information**
+- [List anything needed to complete or validate the analysis]
+
+**📝 Assumptions Made**
+- [List every assumption, no matter how small]
+
+---
 
 ## Comparison Mode
-When I say "compare offices" or provide multiple offices, create a single side-by-side table showing:
-- Practice Name
-- Gross Revenue
-- Net Income
-- Base EBITDA
-- Total Add Backs
-- Adjusted EBITDA
-- EBITDA Margin %
-- Key Notes
+
+Use `/templates/comparison.md` if it exists. Otherwise use this default format exactly when comparing multiple offices.
+
+---
+
+# Practice Comparison
+**Date of Analysis:** [Today's Date]
+
+| Metric | [Office 1] | [Office 2] | [Office 3] |
+|--------|-----------|-----------|-----------|
+| Year(s) Analyzed | | | |
+| Gross Revenue | | | |
+| Net Income | | | |
+| Base EBITDA | | | |
+| Total Add Backs | | | |
+| Adjusted EBITDA | | | |
+| EBITDA Margin % | | | |
+| Key Red Flags | | | |
+| Missing Info | | | |
+
+**Comparison Notes:**
+- [Plain English summary of how the offices stack up against each other]
+- [Any patterns or anomalies worth calling out across the group]
+
+---
 
 ## Rules
 - Always think step by step through the financials before giving me numbers
